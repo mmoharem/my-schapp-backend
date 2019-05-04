@@ -20,8 +20,10 @@ use Illuminate\Http\Request;
 // });
 
 Route::get('/', 'UserController@index');
-Route::get('/user', 'UserController@user')->middleware('auth:api');
-Route::post('/login', 'AuthController@login');
+//Route::get('/user', 'UserController@user')->middleware('auth:api');
+//Route::post('/login', 'AuthController@login');
+Route::resource('/user', 'UserController');
+Route::resource('/test/user', 'TestUserController');
 
 //Route::get('/students', 'StudentController@index');
 //Route::post('/student/creat', 'StudentController@store');
@@ -29,8 +31,8 @@ Route::post('/upload/img', 'Images\ImageController@store');
 Route::post('/signup', 'StudentController@store');
 
 //student
-Route::resource('/students', 'Student\StudentController', ['only' => ['index', 'store']]);
-Route::post('/students/img/{id}', 'Student\StudentController@update');
+Route::resource('/students', 'Student\StudentController', ['only' => ['index', 'store', 'update', 'destroy']]);
+//Route::post('/students/img/{id}', 'Student\StudentController@update');
 Route::post('/students/attend', 'Student\StudAttendanceController@store');
 Route::resource('/students/transactions', 'Transactions\TransactionsController', ['only' => ['index', 'store', 'show']]);
 //Route::resource('/students/payments', 'Payments\StudPayments', ['only' => ['index', 'store']]);
@@ -42,6 +44,10 @@ Route::resource('/school/fees', 'Fees\FeesController', ['only' => ['index', 'sto
 //Route::resource('/search', 'Search\OldSearchController', ['only' => ['filter']]);
 //Route::get('/search', 'OldSearchController@index');
 Route::post('/search', 'OldSearchController@filter');
+Route::post('/students/search', 'OldSearchController@filterStudents');
+
+//Pdf
+Route::get('/pdf', 'other\PrintController@pdf');
 
 
 

@@ -2,30 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Repositories\UserRepositoriesInterface;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserRegisterRequest;
-use \Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    protected $userRepo = null;
+
+    // Contract Function
+    public function __construct(UserRepositoriesInterface $userRepo)
+    {
+        $this->userRepo = $userRepo;
+    }
+
+    // Show All Users
     public function index () {
-        return User::all();
+        return $this->userRepo->getAllUsers();
     }
 
-    public function user (Request $request) {
-        return $request->user();
+    // Find User
+    public function show($id) {
+        return $this->userRepo->getUsersById($id);
     }
 
-    public function create(UserRegisterRequest $request) {
+    // Create User
+    public function store(Request $request) {
 
-        User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $data = $request->only($this->userRepo->getUserModel()->fillabl);
 
-        return 'user created successfully';
+//        $user =  $this->userRepo->CreateUpdateUser($data);
+
+        return $request->all();
     }
+
+    // Update User
+    public function update(Request $data, $id) {
+        $user = $this->userRepo->CreateUpdateUser($data, $id);
+
+        return $data->firstName;
+    }
+
+    // Delete User
+    public function destroy($id) {
+        $this->userRepo->DeleteUser($id);
+
+        return 'user deleted';
+    }
+
 }

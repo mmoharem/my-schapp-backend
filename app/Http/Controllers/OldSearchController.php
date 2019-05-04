@@ -33,7 +33,7 @@ class OldSearchController extends ApiController
 //
 //    }
 //
-    public function filter(Request $request) {
+    public function filterUsers(Request $request) {
         $users = ApiSearch::apply($request);
 
 //        $student = $user->whereHas('student')->get();
@@ -58,5 +58,12 @@ class OldSearchController extends ApiController
         $students = collect($students)->collapse();
 //        return $users;
         return $this->showAll($students);
+    }
+
+    public function filterStudents(Request $request) {
+
+        $users = ApiSearch::applyStudent($request);
+
+        return $users;
     }
 }

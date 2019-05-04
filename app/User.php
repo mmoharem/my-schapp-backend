@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Employee;
 use App\Models\Image;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -48,6 +49,10 @@ class User extends Authenticatable
 
      public function images() {
          return $this->morphToMany(Image::class, 'imageable');
+     }
+
+     public function employee() {
+         return $this->belongsTo(Employee::class, '');
      }
 
 //    public function filter(Request $request, User $user) {
