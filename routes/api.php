@@ -19,7 +19,8 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::get('/', 'UserController@index');
+Route::get('/login', 'UserController@user')->middleware('auth:api');
+//Route::get('/', 'UserController@index');
 //Route::get('/user', 'UserController@user')->middleware('auth:api');
 //Route::post('/login', 'AuthController@login');
 Route::resource('/user', 'UserController');
@@ -31,20 +32,26 @@ Route::post('/upload/img', 'Images\ImageController@store');
 Route::post('/signup', 'StudentController@store');
 
 //student
-Route::resource('/students', 'Student\StudentController', ['only' => ['index', 'store', 'update', 'destroy']]);
-//Route::post('/students/img/{id}', 'Student\StudentController@update');
-Route::post('/students/attend', 'Student\StudAttendanceController@store');
+Route::resource('/students', 'Student\StudentController', ['only' => ['index', 'store', 'show', 'destroy']])->middleware('auth:api');
+Route::resource('/students/attend', 'Student\StudAttendanceController', ['only' =>['store', 'show']]);
 Route::resource('/students/transactions', 'Transactions\TransactionsController', ['only' => ['index', 'store', 'show']]);
 //Route::resource('/students/payments', 'Payments\StudPayments', ['only' => ['index', 'store']]);
 Route::get('/calc/{id}', 'Payments\StudPayments@calcPayments');
+Route::post('/students/search', 'Search\SearchController@filterStudents');
+
+//Employee
+Route::resource('/employee', 'Employee\EmployeeController', ['only' => ['index', 'store', 'show', 'destroy']]);
+Route::post('/employee/search', 'Search\SearchController@filterEmployee');
+
+//Teachers
+Route::resource('/teachers', 'Teachers\TeachersController', ['only' => ['index', 'store', 'show', 'destroy']]);
 
 //School
 Route::resource('/school/grade', 'Grade\GradeController', ['only' => ['index', 'store', 'show']]);
 Route::resource('/school/fees', 'Fees\FeesController', ['only' => ['index', 'store']]);
 //Route::resource('/search', 'Search\OldSearchController', ['only' => ['filter']]);
 //Route::get('/search', 'OldSearchController@index');
-Route::post('/search', 'OldSearchController@filter');
-Route::post('/students/search', 'OldSearchController@filterStudents');
+//Route::post('/search', 'OldSearchController@filter');
 
 //Pdf
 Route::get('/pdf', 'other\PrintController@pdf');

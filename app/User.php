@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Employee;
 use App\Models\Image;
+use App\Models\Salary;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Laravel\Passport\HasApiTokens;
@@ -52,7 +53,7 @@ class User extends Authenticatable
      }
 
      public function employee() {
-         return $this->belongsTo(Employee::class, '');
+         return $this->hasOne(Employee::class, 'user_id');
      }
 
 //    public function filter(Request $request, User $user) {

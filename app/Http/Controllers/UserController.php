@@ -15,6 +15,11 @@ class UserController extends Controller
         $this->userRepo = $userRepo;
     }
 
+    //
+    public function user(Request $request) {
+        return $request->user();
+    }
+
     // Show All Users
     public function index () {
         return $this->userRepo->getAllUsers();

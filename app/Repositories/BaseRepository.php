@@ -78,6 +78,11 @@ class BaseRepository implements BaseRepositoryInterface {
         return $this->model->with($relations);
     }
 
+    public function whereWith($whereRel, $withRel)
+    {
+        return $this->model->whereHas($whereRel)->with($withRel);
+    }
+
     // Eager Load DB Relation
     public function __call($method, $args)
     {

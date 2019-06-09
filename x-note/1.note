@@ -1,2 +1,6 @@
 1- add column to table:
     php artisan make:migration add_image_to_users_table --table=users
+
+
+2- create Request
+

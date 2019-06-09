@@ -8,10 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     protected $fillable = [
-        'profession', 'salary', 'reg_date', 'experience'
+        'profession', 'insurance_state', 'reg_date', 'experience'
     ];
 
-    public function users() {
-        return $this->hasMany(User::class, 'user_id');
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function salary() {
+        return $this->belongsTo(Salary::class);
+    }
+
+    public function teacher() {
+        return $this->hasOne(Teacher::class, 'employ_id');
     }
 }

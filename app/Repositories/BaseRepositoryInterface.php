@@ -12,4 +12,6 @@ interface BaseRepositoryInterface {
 
     public function delete($id);
 
+    public function whereWith($whereRel, $withRel);
+
 }

@@ -48,4 +48,12 @@ class Student extends Model
         ]);
 
     }
+
+    public function attend2($attend, $day) {
+        return $this->attendances()->create([
+            'attend' => $attend,
+            'day' => $day
+        ]);
+    }
+
 }

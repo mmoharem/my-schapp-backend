@@ -40,6 +40,7 @@ class StudAttendanceController extends Controller
     public function store(Request $request)
     {
         $rules = [
+            'day' => 'Required',
             'attend' => 'required',
             'id'     => 'required'
         ];
@@ -51,14 +52,17 @@ class StudAttendanceController extends Controller
         $day = Carbon::now('GMT+2')->format('Y-m-d');
 
         $attend1 = DB::table('stud_attendances')
-            ->where('day', $day)
+//            ->where('day', $day)
+            ->where('day', $request->day)
             ->get();
 
         if($attend1->contains('student_id', $request->id)) {
             return 'student attendance already exist';
         }else {
-            $student->checkIn($request->attend);
+//            $student->checkIn($request->attend);
+            $student->attend2($request->attend, $request->day);
         }
+
 
         return $student->attendances;
     }
@@ -71,7 +75,9 @@ class StudAttendanceController extends Controller
      */
     public function show($id)
     {
-        //
+        $student = Student::findOrFail($id);
+
+        return $student->attendances;
     }
 
     /**

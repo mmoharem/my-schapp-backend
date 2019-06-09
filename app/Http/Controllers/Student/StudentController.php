@@ -10,9 +10,7 @@ use App\Models\ShGrade;
 use App\Repositories\BaseRepository;
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserRegisterRequest;
 use App\Http\Requests\StudentCreateRequest;
-use \Illuminate\Support\Facades\Hash;
 
 class StudentController extends ApiController
 {
@@ -44,12 +42,12 @@ class StudentController extends ApiController
      */
     public function index()
     {
-        //$students = User::whereHas('student')->with('student')->get();
-        //$student = Student::with('user.images', 'grade.fees', 'payment')->get();
+//        $student = $this->studentRepo->with(['user.images', 'grade.fees', 'payment'])->get();
 
-        $student = $this->studentRepo->with(['user.images', 'grade.fees', 'payment'])->get();
+        $student = $this->userRepo->whereWith('student', ['images', 'student.grade.fees', 'student.payment'])->get();
 
         return $this->showAll($student);
+//        return $s;
     }
 
 
@@ -61,44 +59,17 @@ class StudentController extends ApiController
      */
     public function store(StudentRegisterRequest $request)
     {
-//        $user = User::create([
-////            'firstName' => $request->firstName,
-////            'lastName' => $request->lastName,
-////            'address' => $request->address,
-////            'gender' => $request->gender,
-////            'birthDate' => $request->birthDate,
-////            'email' => $request->email,
-////            'phoneNumber' => $request->phoneNumber,
-////            'mobilePhone' => $request->mobilePhone,
-////            'medicalState' => $request->medicalState,
-////            'notes' => $request->notes,
-////            'password' => Hash::make($request->password),
-////
-////        ]);
-///
         $user = $this->userRepo->createUpdate($request->only($this->userRepo->getModel()->fillable));
 
-//        $student = new Student([
-//            'class' => $request->class,
-////            'grade_id' => $request->grade,
-////             'grade_id' => 'kg-2',
-////            'class' => 'kg-2c',
-//
-//        ]);
-
-        $image = $this->imgRepo->find($request->image);
+        $image = $this->imgRepo->find($request->image_id);
         $user->images()->save($image);
 
         $student = $this->studentRepo->createUpdate($request->only($this->studentRepo->getModel()->fillable));
-//
+
         $user->student()->save($student);
 
         $grade = $this->gradeRepo->find($request->grade_id);
         $student->grade()->associate($grade)->save();
-
-//        $grade = ShGrade::findOrFail($request->grade);
-//        $grade->students()->save(student);
-//        return response()->json(['data' => $student], 201);
 
         return $this->showOne($student, 201);
     }
@@ -111,11 +82,14 @@ class StudentController extends ApiController
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
 
-        $student =  $user->student;
+        $user = $this->userRepo->find($id);
 
-//        return response()->json(['data' => $student], 200);
+//        $student = $this->userRepo->whereWith('student', ['images', 'student.grade.fees', 'student.payment'])->get();
+
+//        $student = $user->students()->whereHas('student')->with('images', 'student.grade.fees', 'student.payment')->get();
+        $student = $user->student;
+
         return $this->showOne($student);
     }
 

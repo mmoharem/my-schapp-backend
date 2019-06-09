@@ -15,11 +15,10 @@ class CreateTeachersTable extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('reg_date');
             $table->string('material');
-            $table->integer('class_id')->unsigned()->nullable();
-            $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('employ_id')->unsigned()->nullable();
             $table->timestamps();
+            $table->foreign('employ_id')->references('id')->on('employees');
         });
     }
 
